@@ -59,3 +59,22 @@ android {
         }
     }
 }
+
+apply plugin: 'maven'
+
+uploadArchives {
+    repositories.mavenDeployer {
+        def ver = new File(rootDir, '../VERSION').text.trim()
+        def deployPath = System.getenv("MAVEN_REPO")
+        if (deployPath == null) {
+            throw new RuntimeException(
+                "Unable to determine Maven repository directory.")
+        }
+        repository(url: deployPath)
+        pom.project {
+            groupId 'org.apache.cordova'
+            artifactId 'cordova-android'
+            version ver
+        }
+    }
+}
